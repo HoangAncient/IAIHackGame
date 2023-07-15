@@ -24,11 +24,7 @@ public class QuizUI : MonoBehaviour
     {
         
         Instance = this;
-        for (int i = 0; i < 2; i++)
-        {
-            Button localBtn = options[i];
-            localBtn.onClick.AddListener(() => OnClick(localBtn));
-        }
+       
 
 
         if (!render)
@@ -49,7 +45,7 @@ public class QuizUI : MonoBehaviour
 
 
         questionInfoText.transform.parent.gameObject.transform.parent.gameObject.SetActive(true);
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < question.options.Count; i++)
         {
             Debug.Log("Loasf");
             Button localBtn = options[i];

@@ -12,7 +12,7 @@ public class QuizManager : MonoBehaviour
     public static Question selectedQuestion = new();
 
 
-    void Start()
+    void Awake()
     {
         Instance = this;
         if (QuizManager.questions == null)
