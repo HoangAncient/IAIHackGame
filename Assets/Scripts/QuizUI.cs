@@ -160,9 +160,11 @@ public class QuizUI : MonoBehaviour
             render = false;
 
         }
+        CollisionScript.animator.SetTrigger("Attack");
+        Time.timeScale = 1f;
         answered = false;
         Invoke("DeleteScene", 0.6f);
-        spr.Instance.UpdateGame();
+        spr.Instance.Create();
 
     }
 

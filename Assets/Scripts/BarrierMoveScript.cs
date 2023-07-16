@@ -10,12 +10,13 @@ public class BarrierMoveScript : MonoBehaviour
     {
         
     }
+   
 
     // Update is called once per frame
     void Update()
     {
         transform.position = transform.position + (Vector3.left * speed) * Time.deltaTime;
-        if (transform.position.x < -15)
+        if (transform.position.y < -8 || transform.position.x < -15)
         {
             Destroy(gameObject);
         }

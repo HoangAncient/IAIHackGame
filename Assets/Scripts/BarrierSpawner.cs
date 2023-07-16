@@ -6,30 +6,37 @@ public class spr : MonoBehaviour
 {
     public GameObject barrier;
     public static spr Instance;
-   // public float spawnRate = 2;
-  //  private float timer = 0;
+    public float spawnRate = 5;
+    private float timer = 0;
     // Start is called before the first frame update
     void Start()
     {
-        Instance = this;    
-        UpdateGame();
+        Instance = this;
+        Instantiate(barrier, transform.position, transform.rotation);
+    }
+    
+    void Update()
+    {
+        if (gameObject.tag == "Item")
+        {
+            if (timer < spawnRate)
+            {
+                timer = timer + Time.deltaTime;
+            }
+            else
+            {
+                Instantiate(barrier, transform.position, transform.rotation);
+                timer = 0;
+            }
+        }
     }
 
     // Update is called once per frame
-    public void UpdateGame()
+    public void Create()
     {
-        /*if (timer < spawnRate)
-        {
-            timer = timer + Time.deltaTime;
-        }
-        else
-        {
-            Instantiate(barrier, transform.position, transform.rotation);
-            timer = 0;
-        }*/
+        Instantiate(barrier, transform.position, transform.rotation);
+       
         //continue game
-            Instantiate(barrier, transform.position, transform.rotation);
-        
     }
     public void play()
     {
