@@ -40,7 +40,7 @@ public class QuizUI : MonoBehaviour
 
 
 
-    public void SetQuestion(Question question)
+    public void SetMultipleChoiceQuestion(Question question)
     {
 
 
