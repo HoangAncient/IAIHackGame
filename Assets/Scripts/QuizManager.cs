@@ -111,7 +111,7 @@ public class QuizManager : MonoBehaviour
                         singleQuestion.correctAns = questionInfo[3];
                         singleQuestion.questionType = QuestionType.TEXT;
 
-                        switch (questionInfo[4])
+                        switch (questionInfo[3])
                         {
                             case "MC2":
                                 singleQuestion.renderType = QuestionRenderType.MultipleType2;
