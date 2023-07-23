@@ -32,6 +32,9 @@ public class QuizManager : MonoBehaviour
     {
         Debug.Log("START GAME AND SELECTQUES()");
     
+
+
+
         SelectQuestion();
 
     }
@@ -48,7 +51,7 @@ public class QuizManager : MonoBehaviour
         //send the question to quizGameUI
 
         Debug.Log(QuizManager.selectedQuestion.questionInfo);
-        QuizUI.Instance.SetQuestion(QuizManager.selectedQuestion);
+        QuizUI.Instance.SetMultipleChoiceQuestion(QuizManager.selectedQuestion);
 
         QuizManager.questions.RemoveAt(val);
         // Debug.Log(QuizManager.selectedQuestion.questionInfo);
@@ -77,9 +80,6 @@ public class QuizManager : MonoBehaviour
                 PointCalculator.currentStreak = 0;
             }
         }
-        Debug.Log("TIMES answering = " + times);
-        Debug.Log("CURRENT POINT = " + PointCalculator.currentPoint);
-        Debug.Log("CURRENT STREAK = " + PointCalculator.currentStreak);
         //return the value of correct bool
         return correctAns;
     }
@@ -120,6 +120,22 @@ public class QuizManager : MonoBehaviour
                         singleQuestion.correctAns = questionInfo[3];
                         singleQuestion.questionType = QuestionType.TEXT;
 
+                        switch (questionInfo[3])
+                        {
+                            case "MC2":
+                                singleQuestion.renderType = QuestionRenderType.MultipleType2;
+                                break;
+                            case "MC3":
+                                singleQuestion.renderType = QuestionRenderType.MultipleType3;
+                                break;
+                            case "MC4":
+                                singleQuestion.renderType = QuestionRenderType.MultipleType4;
+                                break;
+                            case "Formfill":
+                                singleQuestion.renderType = QuestionRenderType.Formfill;
+                                break;
+
+                        }
 
                         singleQuestion.options.Add(Convert.ToString(questionInfo[1]));
                         singleQuestion.options.Add(Convert.ToString(questionInfo[2]));
@@ -153,6 +169,7 @@ public class Question
     public UnityEngine.Video.VideoClip videoClip;   //video for video type
     public List<string> options = new();        //options to select
     public string correctAns;           //correct option
+    public QuestionRenderType renderType; //render type
 }
 
 [System.Serializable]
@@ -162,4 +179,12 @@ public enum QuestionType
     IMAGE,
     AUDIO,
     VIDEO
+}
+
+public enum QuestionRenderType
+{
+    MultipleType2,
+    MultipleType3,
+    MultipleType4,
+    Formfill
 }

@@ -45,7 +45,7 @@ public class QuizUI : MonoBehaviour
 
 
 
-    public void SetQuestion(Question question)
+    public void SetMultipleChoiceQuestion(Question question)
     {
 
 
@@ -189,6 +189,12 @@ public class QuizUI : MonoBehaviour
         timeAfterUpdate += 1;
         Debug.Log("Number of times AFTER Update = " + timeAfterUpdate);
         // Debug.Log("CURRENT POINT = " + PointCalculator.currentPoint);
+        CollisionScript.animator.SetTrigger("Attack");
+        Time.timeScale = 1f;
+        answered = false;
+        Invoke("DeleteScene", 0.6f);
+        spr.Instance.Create();
+
     }
 
     // Update is called once per frame
