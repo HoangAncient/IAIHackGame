@@ -6,6 +6,11 @@ using TMPro;
 
 public class QuizUI : MonoBehaviour
 {
+    public int TimesCallButton = 0;
+
+    public int timeBeforeUpdate = 0;
+
+    public int timeAfterUpdate = 0;
     public static QuizUI Instance;
     public Image questionImg;                     //image component to show image
     public UnityEngine.Video.VideoPlayer questionVideo;   //to show video
@@ -45,12 +50,21 @@ public class QuizUI : MonoBehaviour
 
 
         questionInfoText.transform.parent.gameObject.transform.parent.gameObject.SetActive(true);
+        Debug.Log("Question.option.count = " + question.options.Count);
         for (int i = 0; i < question.options.Count; i++)
         {
-            Debug.Log("Loasf");
+            // Debug.Log("Loasf");
             Button localBtn = options[i];
-            localBtn.onClick.AddListener(() => OnClick(localBtn));
-            Debug.Log("Loasf2");
+            localBtn.enabled = true;
+
+            if (!answered) {
+                localBtn.onClick.AddListener(() => OnClick(localBtn));
+            }
+
+            // localBtn.onClick.AddListener(() => OnClick(localBtn));
+            // Debug.Log("Loasf2");
+            // localBtn.enabled = false;
+            // localBtn.enabled = true;
         }
         //set the question
         this.question = question;
@@ -132,13 +146,17 @@ public class QuizUI : MonoBehaviour
     {
         questionInfoText.transform.parent.gameObject.transform.parent.gameObject.SetActive(false);
     }
+
     void OnClick(Button btn)
     {
+        // btn.enabled = false;
 
+        TimesCallButton += 1;
+        Debug.Log("Times Onclick = " + TimesCallButton);
         //if answered is false
 
         //set answered true
-        answered = true;
+        // answered = true;
         //get the bool value
         Debug.Log("popit");
         bool val = QuizManager.Instance.Answer(btn.name);
@@ -150,6 +168,7 @@ public class QuizUI : MonoBehaviour
             btn.image.color = CorrectCol;
             Debug.Log("dung1");
             render = false;
+            // PointCalculator.currentPoint += 10;
 
         }
         else
@@ -160,10 +179,16 @@ public class QuizUI : MonoBehaviour
             render = false;
 
         }
-        answered = false;
+        answered = true;
+        // answered = false;
         Invoke("DeleteScene", 0.6f);
+        timeBeforeUpdate += 1;
+        Debug.Log("Number of times BEFORE Update = " + timeBeforeUpdate);
         spr.Instance.UpdateGame();
-
+        // btn.enabled = false;
+        timeAfterUpdate += 1;
+        Debug.Log("Number of times AFTER Update = " + timeAfterUpdate);
+        // Debug.Log("CURRENT POINT = " + PointCalculator.currentPoint);
     }
 
     // Update is called once per frame

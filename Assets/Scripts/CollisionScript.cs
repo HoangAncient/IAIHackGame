@@ -14,6 +14,7 @@ public class CollisionScript : MonoBehaviour
         
         MovePlayer();
     }
+
     private void  OnCollisionEnter2D (Collision2D collision)
     {
         Debug.Log("Hit");

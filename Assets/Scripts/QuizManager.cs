@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+// namespace QuizNamespace {
 public class QuizManager : MonoBehaviour
 {
     public static QuizManager Instance;
     public static List<Question> questions;
     //current question data
     public static Question selectedQuestion = new();
+
+    public static int times = 0;
 
 
     void Awake()
@@ -27,20 +30,19 @@ public class QuizManager : MonoBehaviour
     // Start is called before the first frame update
     public void StartGame()
     {
-        
-       
-       
+        Debug.Log("START GAME AND SELECTQUES()");
+    
         SelectQuestion();
 
     }
-    public void GetData() => StartCoroutine(GetQuestions("http://localhost/unitygame/game1/GetQuestions.php"));
+    public void GetData() => StartCoroutine(GetQuestions("http://localhost:8080/unitygame/game1/GetQuestions.php"));
 
     public void SelectQuestion()
     {
-        Debug.Log(QuizManager.questions.Count);
+        Debug.Log("Number of question" + QuizManager.questions.Count);
         //get the random number
         int val = UnityEngine.Random.Range(0, questions.Count - 1);
-        Debug.Log(val);
+        Debug.Log("Random question selected" + val);
         //set the selectedQuetion
         QuizManager.selectedQuestion = QuizManager.questions[val];
         //send the question to quizGameUI
@@ -49,7 +51,7 @@ public class QuizManager : MonoBehaviour
         QuizUI.Instance.SetQuestion(QuizManager.selectedQuestion);
 
         QuizManager.questions.RemoveAt(val);
-        Debug.Log(QuizManager.selectedQuestion.questionInfo);
+        // Debug.Log(QuizManager.selectedQuestion.questionInfo);
     }
 
     public bool Answer(string answered)
@@ -58,19 +60,26 @@ public class QuizManager : MonoBehaviour
         bool correctAns = false;
         //if selected answer is similar to the correctAns
         Debug.Log("popup");
-
+        times += 1;
 
         if (answered == QuizManager.selectedQuestion.correctAns)
         {
             correctAns = true;
             ////call SelectQuestion method again after 1s
             //Invoke("SelectQuestion", 0.4f);
+            PointCalculator.currentPoint += 10;
+            // Debug.Log("CURRENT POINT = " + PointCalculator.currentPoint);
+            PointCalculator.currentStreak += 1;
         }
         else
         {
-
+            if(!PointCalculator.StreakProtection){
+                PointCalculator.currentStreak = 0;
+            }
         }
-        
+        Debug.Log("TIMES answering = " + times);
+        Debug.Log("CURRENT POINT = " + PointCalculator.currentPoint);
+        Debug.Log("CURRENT STREAK = " + PointCalculator.currentStreak);
         //return the value of correct bool
         return correctAns;
     }
@@ -132,6 +141,7 @@ public class QuizManager : MonoBehaviour
         }
     }
 }
+// }
 
 
 public class Question
