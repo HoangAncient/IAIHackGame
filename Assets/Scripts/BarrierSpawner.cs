@@ -9,7 +9,7 @@ public class spr : MonoBehaviour
     public float spawnRate = 5;
     private float timer = 0;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         Instance = this;
         Instantiate(barrier, transform.position, transform.rotation);

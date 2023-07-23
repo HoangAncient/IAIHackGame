@@ -56,6 +56,7 @@ public class QuizUI : MonoBehaviour
             // Debug.Log("Loasf");
             Button localBtn = options[i];
             localBtn.enabled = true;
+            options[i].image.color = new Color(93, 93, 69);
 
             if (!answered) {
                 localBtn.onClick.AddListener(() => OnClick(localBtn));
@@ -114,7 +115,10 @@ public class QuizUI : MonoBehaviour
             //set the child text
             options[i].GetComponentInChildren<TMP_Text>().text = ansOptions[i];
             options[i].name = ansOptions[i];    //set the name of button
-            options[i].image.color = normalCol; //set color of button to normal
+            // options[i].image.color = normalCol; //set color of button to normal
+            // options[i].enabled = false;
+            // options[i].enabled = true;
+            // options[i].image.color = new Color(93, 93, 69);
         }
 
         answered = false;
@@ -181,18 +185,21 @@ public class QuizUI : MonoBehaviour
         }
         answered = true;
         // answered = false;
-        Invoke("DeleteScene", 0.6f);
-        timeBeforeUpdate += 1;
-        Debug.Log("Number of times BEFORE Update = " + timeBeforeUpdate);
-        spr.Instance.UpdateGame();
-        // btn.enabled = false;
-        timeAfterUpdate += 1;
-        Debug.Log("Number of times AFTER Update = " + timeAfterUpdate);
+        // Invoke("DeleteScene", 0.6f);
+        // timeBeforeUpdate += 1;
+        // Debug.Log("Number of times BEFORE Update = " + timeBeforeUpdate);
+        // spr.Instance.UpdateGame();
+        // // btn.enabled = false;
+        // timeAfterUpdate += 1;
+        // Debug.Log("Number of times AFTER Update = " + timeAfterUpdate);
         // Debug.Log("CURRENT POINT = " + PointCalculator.currentPoint);
+
         CollisionScript.animator.SetTrigger("Attack");
         Time.timeScale = 1f;
-        answered = false;
+        // answered = false;
         Invoke("DeleteScene", 0.6f);
+        // btn.enabled = false;
+        // btn.enabled = true;
         spr.Instance.Create();
 
     }

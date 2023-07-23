@@ -80,6 +80,8 @@ public class QuizManager : MonoBehaviour
                 PointCalculator.currentStreak = 0;
             }
         }
+        Debug.Log("CURRENT POINT = " + PointCalculator.currentPoint);
+        Debug.Log("CURRENT Streak = " + PointCalculator.currentStreak);
         //return the value of correct bool
         return correctAns;
     }
