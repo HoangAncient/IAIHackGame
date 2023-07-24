@@ -121,8 +121,8 @@ public class QuizManager : MonoBehaviour
                         singleQuestion.questionInfo = questionInfo[0];
                         singleQuestion.correctAns = questionInfo[3];
                         singleQuestion.questionType = QuestionType.TEXT;
-
-                        switch (questionInfo[3])
+                        Debug.Log(questionInfo[4]);
+                        switch (questionInfo[4])
                         {
                             case "MC2":
                                 singleQuestion.renderType = QuestionRenderType.MultipleType2;
@@ -143,7 +143,7 @@ public class QuizManager : MonoBehaviour
                         singleQuestion.options.Add(Convert.ToString(questionInfo[2]));
 
                         Debug.Log("question:" + singleQuestion.questionInfo + "choice1: " + singleQuestion.options[0]
-                            + "choice2: " + singleQuestion.options[1] + "answer: " + singleQuestion.correctAns);
+                            + "choice2: " + singleQuestion.options[1] + "answer: " + singleQuestion.correctAns + "renderType: " + singleQuestion.renderType);
 
                         QuizManager.questions.Add(singleQuestion);
 

@@ -67,6 +67,23 @@ public class QuizUI : MonoBehaviour
             // localBtn.enabled = false;
             // localBtn.enabled = true;
         }
+        switch (question.renderType)
+        {
+            case QuestionRenderType.MultipleType2:
+                options[2].transform.gameObject.SetActive(false);
+                options[3].transform.gameObject.SetActive(false);
+                break;
+            case QuestionRenderType.MultipleType3:
+                options[3].transform.parent.gameObject.SetActive(false);
+                break;
+            case QuestionRenderType.MultipleType4:
+                break;
+            case QuestionRenderType.Formfill:
+                options[1].transform.gameObject.SetActive(false);
+                options[2].transform.gameObject.SetActive(false);
+                options[3].transform.gameObject.SetActive(false);
+                break;
+        }
         //set the question
         this.question = question;
         //check for questionType
