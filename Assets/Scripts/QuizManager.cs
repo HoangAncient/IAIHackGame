@@ -30,7 +30,6 @@ public class QuizManager : MonoBehaviour
     // Start is called before the first frame update
     public void StartGame()
     {
-        Debug.Log("START GAME AND SELECTQUES()");
     
 
 
@@ -38,20 +37,17 @@ public class QuizManager : MonoBehaviour
         SelectQuestion();
 
     }
-    public void GetData() => StartCoroutine(GetQuestions("http://localhost:8080/unitygame/game1/GetQuestions.php"));
+    public void GetData() => StartCoroutine(GetQuestions("http://localhost/unitygame/game1/GetQuestions.php"));
 
     public void SelectQuestion()
     {
-        Debug.Log("Number of question" + QuizManager.questions.Count);
         //get the random number
         int val = UnityEngine.Random.Range(0, questions.Count - 1);
-        Debug.Log("Random question selected" + val);
         //set the selectedQuetion
         QuizManager.selectedQuestion = QuizManager.questions[val];
         //send the question to quizGameUI
 
-        Debug.Log(QuizManager.selectedQuestion.questionInfo);
-        QuizUI.Instance.SetMultipleChoiceQuestion(QuizManager.selectedQuestion);
+        QuizUI.Instance.SetQuestion(QuizManager.selectedQuestion);
 
         QuizManager.questions.RemoveAt(val);
         // Debug.Log(QuizManager.selectedQuestion.questionInfo);
@@ -62,7 +58,6 @@ public class QuizManager : MonoBehaviour
         //set default to false
         bool correctAns = false;
         //if selected answer is similar to the correctAns
-        Debug.Log("popup");
         times += 1;
 
         if (answered == QuizManager.selectedQuestion.correctAns)
@@ -114,36 +109,55 @@ public class QuizManager : MonoBehaviour
                     for (int i = 0; i < questionList.Length - 1; i++)
                     {
 
-                        string[] questionInfo = questionList[i].Split(',');
-
-
+                        string[] questionDetail = questionList[i].Split('@');
                         Question singleQuestion = new();
-                        singleQuestion.questionInfo = questionInfo[0];
-                        singleQuestion.correctAns = questionInfo[3];
-                        singleQuestion.questionType = QuestionType.TEXT;
-                        Debug.Log(questionInfo[4]);
-                        switch (questionInfo[4])
+                        switch (questionDetail[0])
                         {
                             case "MC2":
+                                
+                                singleQuestion.questionInfo = questionDetail[1];
+                                singleQuestion.correctAns = questionDetail[2];
+                                singleQuestion.questionType = QuestionType.TEXT;
                                 singleQuestion.renderType = QuestionRenderType.MultipleType2;
+                                singleQuestion.options.Add(Convert.ToString(questionDetail[3]));
+                                singleQuestion.options.Add(Convert.ToString(questionDetail[4]));
                                 break;
                             case "MC3":
+                                
+                                singleQuestion.questionInfo = questionDetail[1];
+                                singleQuestion.correctAns = questionDetail[2];
+                                singleQuestion.questionType = QuestionType.TEXT;
+                             
                                 singleQuestion.renderType = QuestionRenderType.MultipleType3;
+                                singleQuestion.options.Add(Convert.ToString(questionDetail[3]));
+                                singleQuestion.options.Add(Convert.ToString(questionDetail[4]));
+                                singleQuestion.options.Add(Convert.ToString(questionDetail[5]));
+                                
                                 break;
                             case "MC4":
+                               
+                                singleQuestion.questionInfo = questionDetail[1];
+                                singleQuestion.correctAns = questionDetail[2];
+                                singleQuestion.questionType = QuestionType.TEXT;
+                                                  
                                 singleQuestion.renderType = QuestionRenderType.MultipleType4;
+                                singleQuestion.options.Add(Convert.ToString(questionDetail[3]));
+                                singleQuestion.options.Add(Convert.ToString(questionDetail[4]));
+                                singleQuestion.options.Add(Convert.ToString(questionDetail[5]));
+                                singleQuestion.options.Add(Convert.ToString(questionDetail[6]));
                                 break;
-                            case "Formfill":
+                            case "formfill":
+                                
+                                singleQuestion.questionInfo = questionDetail[1];
+                                singleQuestion.correctAns = questionDetail[2];
+                                singleQuestion.questionType = QuestionType.TEXT;
+                                                        
                                 singleQuestion.renderType = QuestionRenderType.Formfill;
                                 break;
-
                         }
 
-                        singleQuestion.options.Add(Convert.ToString(questionInfo[1]));
-                        singleQuestion.options.Add(Convert.ToString(questionInfo[2]));
 
-                        Debug.Log("question:" + singleQuestion.questionInfo + "choice1: " + singleQuestion.options[0]
-                            + "choice2: " + singleQuestion.options[1] + "answer: " + singleQuestion.correctAns + "renderType: " + singleQuestion.renderType);
+
 
                         QuizManager.questions.Add(singleQuestion);
 

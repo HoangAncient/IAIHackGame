@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,8 +18,10 @@ public class QuizUI : MonoBehaviour
     public TMP_Text questionInfoText;                 //text to show question
     public List<Button> options;                  //options button reference
     public Color CorrectCol, WrongCol, normalCol; //color of buttons
-    
-    
+    public TMP_Text formfillInstruction;
+    public InputField formfillChoice;
+    public Button Submit;
+
     public float audioLength;          //store audio length
     public Question question;          //store current question data
     public bool answered = false;
@@ -29,7 +31,24 @@ public class QuizUI : MonoBehaviour
     {
         
         Instance = this;
-       
+        for (int i = 0; i < 4; i++)
+        {
+            // Debug.Log("Loasf");
+            Button localBtn = options[i];
+            localBtn.enabled = true;
+            options[i].image.color = new Color(93, 93, 69);
+
+            if (!answered)
+            {
+                localBtn.onClick.AddListener(() => OnClick(localBtn));
+                Debug.Log(i);
+            }
+
+            // localBtn.onClick.AddListener(() => OnClick(localBtn));
+            // Debug.Log("Loasf2");
+            // localBtn.enabled = false;
+            // localBtn.enabled = true;
+        }
 
 
         if (!render)
@@ -45,50 +64,122 @@ public class QuizUI : MonoBehaviour
 
 
 
-    public void SetMultipleChoiceQuestion(Question question)
+    public void SetQuestion(Question question)
     {
 
 
         questionInfoText.transform.parent.gameObject.transform.parent.gameObject.SetActive(true);
         Debug.Log("Question.option.count = " + question.options.Count);
-        for (int i = 0; i < question.options.Count; i++)
-        {
-            // Debug.Log("Loasf");
-            Button localBtn = options[i];
-            localBtn.enabled = true;
-            options[i].image.color = new Color(93, 93, 69);
-
-            if (!answered) {
-                localBtn.onClick.AddListener(() => OnClick(localBtn));
-            }
-
-            // localBtn.onClick.AddListener(() => OnClick(localBtn));
-            // Debug.Log("Loasf2");
-            // localBtn.enabled = false;
-            // localBtn.enabled = true;
-        }
+       
         switch (question.renderType)
         {
             case QuestionRenderType.MultipleType2:
+                Debug.Log("MC2");
+                options[0].transform.gameObject.SetActive(true);
+                options[1].transform.gameObject.SetActive(true);
                 options[2].transform.gameObject.SetActive(false);
                 options[3].transform.gameObject.SetActive(false);
+                options[0].enabled = true;
+                options[1].enabled = true;
+                options[2].enabled = false;
+                options[3].enabled = false;
+                
+                formfillInstruction.transform.parent.gameObject.SetActive(false);
                 break;
             case QuestionRenderType.MultipleType3:
-                options[3].transform.parent.gameObject.SetActive(false);
+                Debug.Log("MC3");
+                options[0].transform.gameObject.SetActive(true);
+                options[1].transform.gameObject.SetActive(true);
+                options[2].transform.gameObject.SetActive(true);
+                options[3].transform.gameObject.SetActive(false);
+                options[3].enabled = false;
+                options[0].enabled = true;
+                options[1].enabled = true;
+                options[2].enabled = true;
+                
+                
+                formfillInstruction.transform.parent.gameObject.SetActive(false);
                 break;
             case QuestionRenderType.MultipleType4:
+                Debug.Log("MC4");
+                options[0].enabled = true;
+                options[1].enabled = true;
+                options[2].enabled = true;
+                options[3].enabled = true;
+                options[0].transform.gameObject.SetActive(true);
+                options[1].transform.gameObject.SetActive(true);
+                options[2].transform.gameObject.SetActive(true);
+                options[3].transform.gameObject.SetActive(true);                
+                formfillInstruction.transform.parent.gameObject.SetActive(false);
                 break;
             case QuestionRenderType.Formfill:
+                Debug.Log("formfill");
+                options[0].transform.gameObject.SetActive(false);
                 options[1].transform.gameObject.SetActive(false);
                 options[2].transform.gameObject.SetActive(false);
                 options[3].transform.gameObject.SetActive(false);
+                options[0].enabled = false;
+                options[1].enabled = false;
+                options[2].enabled = false;
+                options[3].enabled = false;
+                
+                formfillInstruction.transform.parent.gameObject.SetActive(true);
+                formfillInstruction.transform.gameObject.SetActive(true);
+                formfillChoice.transform.gameObject.SetActive(true);
+                formfillInstruction.text = "Hãy điền câu trả lời vào ô bên cạnh:";
+                
+                formfillChoice.onSubmit.AddListener(e =>
+                {
+                    if (formfillChoice.isFocused)
+                    {
+                        TimesCallButton += 1;
+                        Debug.Log("Times Onclick = " + TimesCallButton);
+                        Debug.Log("Enter");
+                        //if answered is false
+
+                        //set answered true
+                        // answered = true;
+                        //get the bool value
+                        bool val = QuizManager.Instance.Answer(formfillChoice.text.ToLower());
+
+                        //if its true
+                        if (val)
+                        {
+
+
+                            render = false;
+
+                        }
+                        else
+                        {
+                            //else set it to wrong color
+
+
+                            render = false;
+
+                        }
+                        answered = true;
+
+
+                        CollisionScript.animator.SetTrigger("Attack");
+                        Time.timeScale = 1f;
+                        // answered = false;
+                        Invoke("DeleteScene", 0.6f);
+
+                        spr.Instance.Create();
+                    }
+
+                });
+
                 break;
         }
+        
         //set the question
         this.question = question;
         //check for questionType
         switch (question.questionType)
         {
+            
             case QuestionType.TEXT:
                 questionImg.transform.parent.gameObject.SetActive(false);   //deactivate image holder
                 break;
@@ -132,10 +223,8 @@ public class QuizUI : MonoBehaviour
             //set the child text
             options[i].GetComponentInChildren<TMP_Text>().text = ansOptions[i];
             options[i].name = ansOptions[i];    //set the name of button
-            // options[i].image.color = normalCol; //set color of button to normal
-            // options[i].enabled = false;
-            // options[i].enabled = true;
-            // options[i].image.color = new Color(93, 93, 69);
+            options[i].image.color = new Color(93, 93, 69);
+
         }
 
         answered = false;
@@ -178,8 +267,8 @@ public class QuizUI : MonoBehaviour
 
         //set answered true
         // answered = true;
-        //get the bool value
-        Debug.Log("popit");
+        //get the bool
+        Debug.Log(btn.name);
         bool val = QuizManager.Instance.Answer(btn.name);
 
         //if its true
@@ -187,7 +276,7 @@ public class QuizUI : MonoBehaviour
         {
             //set color to correct
             btn.image.color = CorrectCol;
-            Debug.Log("dung1");
+      
             render = false;
             // PointCalculator.currentPoint += 10;
 
@@ -196,7 +285,7 @@ public class QuizUI : MonoBehaviour
         {
             //else set it to wrong color
             btn.image.color = WrongCol;
-            Debug.Log("sai1");
+           
             render = false;
 
         }
@@ -215,8 +304,7 @@ public class QuizUI : MonoBehaviour
         Time.timeScale = 1f;
         // answered = false;
         Invoke("DeleteScene", 0.6f);
-        // btn.enabled = false;
-        // btn.enabled = true;
+   
         spr.Instance.Create();
 
     }
