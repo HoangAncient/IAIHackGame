@@ -16,7 +16,7 @@ public class Login : MonoBehaviour
     {
         LoginButton.onClick.AddListener(() => {
             StartCoroutine(Main.Instance.Web.Login(UsernameInput.text, PasswordInput.text));
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            SceneManager.LoadScene("Scenes/Gamedemo");
         });
 
         RegisterButton.onClick.AddListener(() => {
